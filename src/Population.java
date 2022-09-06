@@ -3,13 +3,14 @@ import java.util.Collections;
 import java.util.Random;
 
 // Authors Vincent Labouret 40259595, Marine Milosavljevic 40259616
-// this Class contain all methods and attributes used to manage a population.
-// we chose to keep track of only one generation at a time as we print our population details on each one
+// This Class contains all methods and attributes used to manage a population.
+// We chose to keep track of only one generation at a time as we print our population details on each one
 public class Population {
-    //the ArrayList can be finals as they are only dynamically accessed
-    private final ArrayList<Individual> people = new ArrayList<>(); // array of individual constituting the population
+    //Attributes
+    //The ArrayList can be put as finals as they are only dynamically accessed
+    private final ArrayList<Individual> people = new ArrayList<>(); // array of individuals constituting the population
     private final ArrayList<Individual> tempPopulation = new ArrayList<>(); // temporary array used for evolution
-    private int genNb; // variable to keep track on which generation we're on
+    private int genNb; // variable to keep track of which generation we're on
     private final int mutationProbability; // fixed mutation probability for the population
     private final int convergenceMargin; // fixed limit for convergence recognizer
 
@@ -17,7 +18,6 @@ public class Population {
     Population(int popSize, int mutationProbability, int convergenceMargin,int maxBound){
         //override constructor to generate a random population with fixed parameters
         this.convergenceMargin = convergenceMargin;
-        //Attributes
         this.genNb = 1;
         this.mutationProbability = mutationProbability;
         for (int i = 0;i < popSize-1;i++){
@@ -26,12 +26,18 @@ public class Population {
         sortPopulation();
     }
 
+    //Getter methods
+
+    public int getGenNb() {
+        return genNb;
+    }
+
     //Methods
     private void sortPopulation(){ // method used to sort the population based on the fitness score
         Collections.sort(people); // lowest is better (gap to solution)
     }
 
-    private void elitism(){ //take the two fittest individuals and them to the next generation
+    private void elitism(){ //take the two fittest individuals and add them to the next generation
         tempPopulation.add(people.get(0));
         tempPopulation.add(people.get(1));
     }
@@ -46,7 +52,7 @@ public class Population {
         }
     }
 
-    private void mutate(){//run across all genes of all individuals and mutate them based on mutationProbability
+    private void mutate(){//run across all genes of all individuals and mutate them based on the mutationProbability
         Random rn = new Random();
         for(Individual current : tempPopulation){
             StringBuilder worker = new StringBuilder(current.getGenes());
@@ -63,7 +69,7 @@ public class Population {
         }
     }
 
-    public void evolve(){ // this method use all the above methods to pass on the next generation of the population
+    public void evolve(){ // this method uses all the above methods to move to the next generation of the population
         elitism();
         crossover();
         mutate();
@@ -74,8 +80,8 @@ public class Population {
         this.genNb++;
     }
 
-    public boolean isConverged(){ // this method verify the gap between individuals scores based on the fittest.
-        // if all the gap are in the convergenceMargin then the population has converged.
+    public boolean isConverged(){ // this method verifies the gap between individuals' scores based on the fittest.
+        // if all the distances to the fittest are within the convergenceMargin then the population has converged.
         for(Individual current : people) {
             if (Math.abs(people.get(0).getScore() - current.getScore()) > convergenceMargin) {
                 return false;

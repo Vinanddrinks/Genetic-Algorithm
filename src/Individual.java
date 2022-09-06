@@ -1,9 +1,7 @@
-
-
 import java.util.Random;
 // Authors Vincent Labouret 40259595, Marine Milosavljevic 40259616
-// the purpose of this class is to define and manage action of Individuals
-// which are members of the populations we will use for genetic algorithms operation
+// The purpose of this class is to define and manage actions of the Individual object
+// which are members of the population we will use for genetic algorithms operation
 public class Individual implements Comparable<Individual>{
     //Attributes
     private int value; // the decimal value of the individual
@@ -11,7 +9,7 @@ public class Individual implements Comparable<Individual>{
     private String genes; // the "genes" of the Individual as the binary value of the decimal value
 
     //Constructors
-    Individual(int maxBound ){ //override constructor to generate randomly an individual with a max value
+    Individual(int maxBound ){ //override constructor to generate randomly an individual with a max value passed as argument
         Random rn = new Random();
         value = rn.nextInt(maxBound);
         String maxBinary = Integer.toBinaryString(maxBound);
@@ -46,7 +44,7 @@ public class Individual implements Comparable<Individual>{
     }
 
     //Methods
-    private void computeScore(){ // this is the fitness function that compute the score of an individual as an absolute value
+    private void computeScore(){ // this is the fitness function that computes the score of an individual as an absolute value
         this.score = Math.abs((value + 3)*(value + 3) -25);
     }
 
@@ -58,9 +56,11 @@ public class Individual implements Comparable<Individual>{
         this.value = Integer.parseInt(genes, 2);
     }
 
-    public String[] cross(Individual second){ // this method create two set of genes from two individual using crossover method
+    public String[] cross(Individual second){ // this method creates two sets of genes from two individuals using crossover method
         Random rn = new Random();
         int crossPoint = rn.nextInt(genes.length()-1);
+        //We split the genes into two parts F (first) and L (last) based on the random crossPoint
+        //then we concatenate the strings to create two new sets of genes
         String firstF = genes.substring(0,crossPoint);
         String firstL = genes.substring(crossPoint);
         String secondF = second.genes.substring(0,crossPoint);
@@ -76,7 +76,7 @@ public class Individual implements Comparable<Individual>{
     @Override // marked for compilation
     /*
     implemented from Comparable interface in order to allow java sorting function from Collection class
-    to sort Individual based on their scores.
+    to sort Individuals based on their scores.
     */
     public int compareTo(Individual o){
         return Integer.compare(this.score, o.score); // same as an if-else-if-else statement
