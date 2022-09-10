@@ -10,8 +10,8 @@ public class Evolution {
                 System.out.println(errorCommonDisplay);
                 System.exit(-1);
             }
-            if(Integer.parseInt(args[6]) < Integer.parseInt(args[1])){
-                System.out.println("highMutationProbability cannot be lower than mutationProbability (number in reverse)");
+            if(Integer.parseInt(args[6]) >= Integer.parseInt(args[1])){
+                System.out.println("highMutationProbability must be lower than mutationProbability (number in reverse)");
                 System.exit(-1);
             
             }
