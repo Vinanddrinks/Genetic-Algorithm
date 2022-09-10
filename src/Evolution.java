@@ -10,6 +10,11 @@ public class Evolution {
                 System.out.println(errorCommonDisplay);
                 System.exit(-1);
             }
+            if(Integer.parseInt(args[6]) < Integer.parseInt(args[1])){
+                System.out.println("highMutationProbability cannot be lower than mutationProbability (number in reverse)");
+                System.exit(-1);
+            
+            }
             Population population = new Population(Integer.parseInt(args[0]),Integer.parseInt(args[1]),Integer.parseInt(args[2]),Integer.parseInt(args[3]),Integer.parseInt(args[4]),Integer.parseInt(args[5]),Integer.parseInt(args[6]));
             System.out.print(population);
             while (!population.isConverged()){ // we evolve the population until it has converged, when it has the evolution process is terminated.
