@@ -13,13 +13,19 @@ public class Population {
     private int genNb; // variable to keep track of which generation we're on
     private final int mutationProbability; // fixed mutation probability for the population
     private final int convergenceMargin; // fixed limit for convergence recognizer
+    private final int elitismCap; // fixed number of individuals kept from one generation to the next
+    private final int mutationCap; // fixed cap for the fitness score after which the mutation probability increases
+    private final int highMutationProbability; // fixed mutation probability in case the mutation cap is reached
 
     //Constructors
-    Population(int popSize, int mutationProbability, int convergenceMargin,int maxBound){
+    Population(int popSize, int mutationProbability, int convergenceMargin,int maxBound, int elitismCap, int mutationCap, int highMutationProbability){
         //override constructor to generate a random population with fixed parameters
         this.convergenceMargin = convergenceMargin;
         this.genNb = 1;
         this.mutationProbability = mutationProbability;
+        this.elitismCap = elitismCap;
+        this.mutationCap = mutationCap;
+        this.highMutationProbability = highMutationProbability;
         for (int i = 0;i < popSize-1;i++){
             people.add(new Individual(maxBound));
         }
@@ -37,9 +43,10 @@ public class Population {
         Collections.sort(people); // lowest is better (gap to solution)
     }
 
-    private void elitism(){ //take the two fittest individuals and add them to the next generation
-        tempPopulation.add(people.get(0));
-        tempPopulation.add(people.get(1));
+    private void elitism(){ //take the n fittest individuals and add them to the next generation
+        for (int i = 0;i < elitismCap;i++){
+            tempPopulation.add(people.get(i));
+        }
     }
 
     private void crossover(){ // generate new population from the fittest individuals using crossover method
@@ -58,7 +65,11 @@ public class Population {
             StringBuilder worker = new StringBuilder(current.getGenes());
             int i = 0;
             for(char letter : current.getGenes().toCharArray()){
-                if (rn.nextInt(mutationProbability)==0){
+                if (rn.nextInt(mutationProbability)==0 && current.getScore() < mutationCap){
+                    if (letter == '0'){
+                        worker.setCharAt(i,'1');
+                    }else worker.setCharAt(i,'0');
+                }else if(rn.nextInt(highMutationProbability) == 0){
                     if (letter == '0'){
                         worker.setCharAt(i,'1');
                     }else worker.setCharAt(i,'0');
